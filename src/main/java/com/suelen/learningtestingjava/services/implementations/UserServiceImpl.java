@@ -1,6 +1,7 @@
 package com.suelen.learningtestingjava.services.implementations;
 
 import com.suelen.learningtestingjava.domain.Users;
+import com.suelen.learningtestingjava.exceptions.ObjectNotFound;
 import com.suelen.learningtestingjava.repositories.UserRepository;
 import com.suelen.learningtestingjava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,6 @@ public class UserServiceImpl implements UserService  {
     @Override
     public Users findById(Integer id) {
         Optional<Users> obj = repository.findById(id);
-        return obj.orElse(null);
+        return obj.orElseThrow(() -> new ObjectNotFound("Object not found"));
     }
 }
