@@ -2,6 +2,7 @@ package com.suelen.learningtestingjava.services.implementations;
 
 import com.suelen.learningtestingjava.domain.Users;
 import com.suelen.learningtestingjava.domain.dto.UserDTO;
+import com.suelen.learningtestingjava.exceptions.DataIntegratyViolation;
 import com.suelen.learningtestingjava.exceptions.ObjectNotFound;
 import com.suelen.learningtestingjava.repositories.UserRepository;
 import com.suelen.learningtestingjava.services.UserService;
@@ -33,6 +34,14 @@ public class UserServiceImpl implements UserService  {
 
     @Override
     public Users create(UserDTO obj) {
+        findByEmail(obj);
         return repository.save(mapper.map(obj, Users.class));
+    }
+
+    public void findByEmail(UserDTO obj){
+        Optional<Users> user = repository.findByEmail(obj.getEmail());
+        if(user.isPresent()){
+            throw new DataIntegratyViolation("Email already registered in the system");
+        }
     }
 }
