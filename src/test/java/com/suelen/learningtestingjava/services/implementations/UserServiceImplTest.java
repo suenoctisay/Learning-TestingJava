@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +26,7 @@ class UserServiceImplTest {
     public static final String NAME = "sue";
     public static final String EMAIL = "sue@mail";
     public static final String PASSWORD = "123";
+    public static final int INDEX = 0;
     @InjectMocks
     private UserServiceImpl service;
 
@@ -71,6 +73,18 @@ class UserServiceImplTest {
 
     @Test
     void findAll() {
+        Mockito.when(repository.findAll()).thenReturn(List.of(user));
+
+        List<Users> response = service.findAll();
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(1, response.size());
+        Assertions.assertEquals(Users.class, response.get(INDEX).getClass());
+
+        Assertions.assertEquals(ID, response.get(INDEX).getId());
+        Assertions.assertEquals(NAME, response.get(INDEX).getName());
+        Assertions.assertEquals(EMAIL, response.get(INDEX).getEmail());
+        Assertions.assertEquals(PASSWORD, response.get(INDEX).getPassword());
     }
 
     @Test
