@@ -2,6 +2,7 @@ package com.suelen.learningtestingjava.services.implementations;
 
 import com.suelen.learningtestingjava.domain.Users;
 import com.suelen.learningtestingjava.domain.dto.UserDTO;
+import com.suelen.learningtestingjava.exceptions.ObjectNotFound;
 import com.suelen.learningtestingjava.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,6 +55,18 @@ class UserServiceImplTest {
         Assertions.assertEquals(ID, response.getId());
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
+    }
+
+    @Test
+    void findByIdObjtNotFound(){
+        Mockito.when(repository.findById(Mockito.anyInt())).thenThrow(new ObjectNotFound("Object not found"));
+
+        try{
+            service.findById(ID);
+        }catch (Exception ex){
+            Assertions.assertEquals(ObjectNotFound.class, ex.getClass());
+            Assertions.assertEquals("Object not found", ex.getMessage());
+        }
     }
 
     @Test
