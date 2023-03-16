@@ -7,6 +7,7 @@ import com.suelen.learningtestingjava.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -88,7 +89,17 @@ class UserServiceImplTest {
     }
 
     @Test
-    void create() {
+    void createSuccess() {
+        Mockito.when(repository.save(Mockito.any())).thenReturn(user);
+
+        Users response = service.create(userDTO);
+
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(Users.class, response.getClass());
+        Assertions.assertEquals(ID, response.getId());
+        Assertions.assertEquals(NAME, response.getName());
+        Assertions.assertEquals(EMAIL, response.getEmail());
+        Assertions.assertEquals(PASSWORD, response.getPassword());
     }
 
     @Test
