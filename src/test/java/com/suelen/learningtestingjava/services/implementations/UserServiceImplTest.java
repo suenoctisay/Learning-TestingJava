@@ -146,7 +146,19 @@ class UserServiceImplTest {
         Mockito.doNothing().when(repository).deleteById(Mockito.anyInt());
         service.delete(ID);
         Mockito.verify(repository, Mockito.times(1)).deleteById(Mockito.anyInt());
+    }
+
+    @Test
+    void deleteObjNotFound(){
+        Mockito.when(repository.findById(Mockito.anyInt())).thenThrow(new ObjectNotFound("Object not found"));
+
+        try{
+            service.delete(ID);
+        }catch (Exception ex){
+            Assertions.assertEquals(ObjectNotFound.class, ex.getClass());
+            Assertions.assertEquals("Object not found", ex.getMessage());
         }
+    }
 
     @Test
     void findByEmail() {
