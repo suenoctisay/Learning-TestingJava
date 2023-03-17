@@ -2,12 +2,12 @@ package com.suelen.learningtestingjava.services.implementations;
 
 import com.suelen.learningtestingjava.domain.Users;
 import com.suelen.learningtestingjava.domain.dto.UserDTO;
+import com.suelen.learningtestingjava.exceptions.DataIntegrityViolation;
 import com.suelen.learningtestingjava.exceptions.ObjectNotFound;
 import com.suelen.learningtestingjava.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -17,8 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -100,6 +98,19 @@ class UserServiceImplTest {
         Assertions.assertEquals(NAME, response.getName());
         Assertions.assertEquals(EMAIL, response.getEmail());
         Assertions.assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void createDataIntegrityViolation(){
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2);
+            service.create(userDTO);
+        }catch (Exception ex){
+            Assertions.assertEquals(DataIntegrityViolation.class, ex.getClass());
+            Assertions.assertEquals("Email already registered in the system", ex.getMessage());
+        }
     }
 
     @Test
