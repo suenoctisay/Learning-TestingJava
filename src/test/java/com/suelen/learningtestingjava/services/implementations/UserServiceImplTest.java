@@ -128,6 +128,19 @@ class UserServiceImplTest {
     }
 
     @Test
+    void updateDataIntegrityViolation(){
+        Mockito.when(repository.findById(Mockito.any())).thenReturn(optionalUser);
+
+        try {
+            optionalUser.get().setId(2);
+            service.create(userDTO);
+        }catch (Exception ex){
+            Assertions.assertEquals(DataIntegrityViolation.class, ex.getClass());
+            Assertions.assertEquals("Email already registered in the system", ex.getMessage());
+        }
+    }
+
+    @Test
     void delete() {
     }
 
