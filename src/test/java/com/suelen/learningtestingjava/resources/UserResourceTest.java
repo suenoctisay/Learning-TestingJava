@@ -3,6 +3,7 @@ package com.suelen.learningtestingjava.resources;
 import com.suelen.learningtestingjava.domain.Users;
 import com.suelen.learningtestingjava.domain.dto.UserDTO;
 import com.suelen.learningtestingjava.services.implementations.UserServiceImpl;
+import org.h2.engine.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,11 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,6 +38,7 @@ class UserResourceTest {
     public static final String NAME = "sue";
     public static final String EMAIL = "sue@mail";
     public static final String PASSWORD = "123";
+    public static final int INDEX = 0;
 
     private Users user;
     private UserDTO userDTO;
@@ -64,6 +69,22 @@ class UserResourceTest {
 
     @Test
     void findAll() {
+        Mockito.when(service.findAll()).thenReturn(List.of(user));
+        Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(userDTO);
+
+        ResponseEntity<List<UserDTO>> response = resource.findAll();
+
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(ArrayList.class, response.getBody().getClass());
+        Assertions.assertEquals(UserDTO.class, response.getBody().get(INDEX).getClass());
+
+        Assertions.assertEquals(ID, response.getBody().get(INDEX).getId());
+        Assertions.assertEquals(NAME, response.getBody().get(INDEX).getName());
+        Assertions.assertEquals(EMAIL, response.getBody().get(INDEX).getEmail());
+        Assertions.assertEquals(PASSWORD, response.getBody().get(INDEX).getPassword());
     }
 
     @Test
