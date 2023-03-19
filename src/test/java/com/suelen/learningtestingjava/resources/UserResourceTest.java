@@ -89,6 +89,13 @@ class UserResourceTest {
 
     @Test
     void create() {
+        Mockito.when(service.create(Mockito.any())).thenReturn(user);
+
+        ResponseEntity<UserDTO> response =  resource.create(userDTO);
+
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Assertions.assertNotNull(response.getHeaders().get("Location"));
     }
 
     @Test
