@@ -50,7 +50,7 @@ class UserResourceTest {
     }
 
     @Test
-    void findByIdSuccess() {
+    void findById() {
         Mockito.when(service.findById(Mockito.anyInt())).thenReturn(user);
         Mockito.when(mapper.map(Mockito.any(), Mockito.any())).thenReturn(userDTO);
 
