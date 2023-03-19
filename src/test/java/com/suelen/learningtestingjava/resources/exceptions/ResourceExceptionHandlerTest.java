@@ -1,5 +1,6 @@
 package com.suelen.learningtestingjava.resources.exceptions;
 
+import com.suelen.learningtestingjava.exceptions.DataIntegrityViolation;
 import com.suelen.learningtestingjava.exceptions.ObjectNotFound;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,5 +42,15 @@ class ResourceExceptionHandlerTest {
 
     @Test
     void dataIV() {
+        ResponseEntity<StandardError> response = exceptionHandler
+                .dataIV(new DataIntegrityViolation("Email already registered in the system"), new MockHttpServletRequest());
+
+        Assertions.assertNotNull(response);
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(StandardError.class, response.getBody().getClass());
+        Assertions.assertEquals("Email already registered in the system", response.getBody().getError());
+        Assertions.assertEquals(400, response.getBody().getStatus());
     }
 }
