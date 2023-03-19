@@ -161,8 +161,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findByEmail() {
-    }
+    void findByEmail() {}
 
     private void startUser(){
         user = new  Users (ID, NAME, EMAIL, PASSWORD);
