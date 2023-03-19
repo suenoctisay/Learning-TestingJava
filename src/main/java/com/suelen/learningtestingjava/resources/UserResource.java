@@ -1,9 +1,7 @@
 package com.suelen.learningtestingjava.resources;
 
-import com.suelen.learningtestingjava.domain.Users;
 import com.suelen.learningtestingjava.domain.dto.UserDTO;
 import com.suelen.learningtestingjava.services.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
